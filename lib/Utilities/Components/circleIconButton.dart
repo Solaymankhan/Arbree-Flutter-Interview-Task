@@ -22,7 +22,7 @@ class circleIconButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(100),
         onTap: onTap,
         child: Ink(
-          height: 35, width: 35,
+          height: 40, width: 40,
           child: Icon(icon, color: icon_clr),
         ),
       ),
