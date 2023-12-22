@@ -22,13 +22,5 @@ class googleAuthentication{
       return false;
     }
   }
-  Future<bool> signOutWithGoogle(context) async{
-    try{
-      await FirebaseAuth.instance.signOut();
-      return true;
-    }catch(e){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
-      return false;
-    }
-  }
+
 }

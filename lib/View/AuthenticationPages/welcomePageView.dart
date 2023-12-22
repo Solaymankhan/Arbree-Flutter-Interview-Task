@@ -13,12 +13,13 @@ import 'package:twitter_clone/View/homeView.dart';
 import 'package:twitter_clone/ViewModel/Functions/HexColor.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../ViewModel/Controllers/authController.dart';
 import 'createAccountView.dart';
 import 'logInView.dart';
 
 class welcomePageView extends StatelessWidget {
-  const welcomePageView({Key? key}) : super(key: key);
-
+  welcomePageView({Key? key}) : super(key: key);
+  final authControl = Get.put(authController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,10 +50,15 @@ class welcomePageView extends StatelessWidget {
                 icon: google_icn,
                 txt: continue_ggle_txt,
                 onTap: () async {
-                  if (await googleAuthentication().signInWithGoogle(context) ==
-                      true) {
-                    Navigator.push(context,
-                        CupertinoPageRoute(builder: (context) => homeView()));
+                  if (await authControl.googleLogin(context) == true) {
+                    Navigator.pushAndRemoveUntil<dynamic>(
+                      context,
+                      MaterialPageRoute<dynamic>(
+                        builder: (BuildContext context) => homeView(),
+                      ),
+                          (route) =>
+                      false, //if you want to disable back feature set to false
+                    );
                   }
                 }),
 

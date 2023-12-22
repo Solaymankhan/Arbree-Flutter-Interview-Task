@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class textField extends StatelessWidget {
   textField({Key? key,required this.labelTxt,required this.keyboardType,required this.obscureText,
-    required this.prefixIcon,required this.onSaved,required this.validator}) : super(key: key);
+    required this.prefixIcon,required this.validator}) : super(key: key);
 
-  var labelTxt,obscureText,prefixIcon,keyboardType,onSaved,validator;
+  var labelTxt,obscureText,prefixIcon,keyboardType,validator;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,6 @@ class textField extends StatelessWidget {
         ),
       ),
       keyboardType: keyboardType,
-      onSaved: onSaved,
       validator: validator,
     );
   }

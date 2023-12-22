@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:twitter_clone/View/AuthenticationPages/welcomePageView.dart';
+import 'package:twitter_clone/ViewModel/Controllers/authController.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../Utilities/Components/button.dart';
@@ -15,10 +16,11 @@ import '../../Utilities/Constants/imagePathes.dart';
 import '../../Utilities/Constants/strings.dart';
 import '../../ViewModel/Functions/HexColor.dart';
 import '../homeView.dart';
-import 'findAccountView.dart';
 
 class enterPasswordView extends StatelessWidget {
-  const enterPasswordView({Key? key}) : super(key: key);
+  enterPasswordView({Key? key}) : super(key: key);
+
+  final authController authControl = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class enterPasswordView extends StatelessWidget {
             MaterialPageRoute<dynamic>(
               builder: (BuildContext context) => welcomePageView(),
             ),
-                (route) => false,//if you want to disable back feature set to false
+                (route) => false,
           );
         }),
             title: SvgPicture.asset(
@@ -44,29 +46,21 @@ class enterPasswordView extends StatelessWidget {
               Expanded(
                 child: SingleChildScrollView(
                   child: Form(
+                    key: authControl.loginPasswordFormKey,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           30.heightBox,
-                          Text(enter_email_txt,
+                          Text(enter_password_txt,
                             style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                           ),
                           30.heightBox,
                           textField(
-                              labelTxt:email_txt,
-                              obscureText: false,
-                              prefixIcon: Icons.email,
-                              keyboardType: TextInputType.emailAddress,
-                              onSaved: (value) {
-                                /*fullname = value!;*/
-                              },
-                              validator: (value) {
-                                /* if (value!.isEmpty) {
-                                  return valid_name_txt;
-                                } else {
-                                  return null;
-                                }*/
-                              }),
+                              labelTxt:password_txt,
+                              obscureText: true,
+                              prefixIcon: Icons.lock,
+                              keyboardType: TextInputType.visiblePassword,
+                              validator: (value)=>authControl.validatePassword(value!)),
                           30.heightBox,
                         ],
                       )),
@@ -80,11 +74,21 @@ class enterPasswordView extends StatelessWidget {
                     height: 35,
                     child: button(
                         btn_clr: HexColor(twitter_color),
-                        txt: next_txt,
+                        txt: login_txt,
                         txt_clr: Colors.white,
-                        onTap: () {
-                          Navigator.push(context,
-                              CupertinoPageRoute(builder: (context) => homeView()));
+                        onTap: () async{
+                          if(authControl.loginPasswordFormKey.currentState!.validate())
+                            {
+                              if(await authControl.emailLogin(context)==true){
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) => homeView(),
+                                  ),
+                                      (route) => false,
+                                );
+                              }
+                            }
                         }),
                   )
                 ],),

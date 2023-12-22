@@ -1,14 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:twitter_clone/Utilities/Constants/colors.dart';
 import 'package:twitter_clone/Utilities/Constants/strings.dart';
 import 'package:twitter_clone/View/AuthenticationPages/welcomePageView.dart';
+import 'package:twitter_clone/View/homeView.dart';
 import 'package:twitter_clone/ViewModel/Functions/HexColor.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -30,8 +32,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: HexColor(twitter_color)),
         useMaterial3: true,
       ),
-      home: const welcomePageView(),
+      home: FirebaseAuth.instance.currentUser == null
+          ? welcomePageView()
+          : homeView(),
     );
   }
 }
-
